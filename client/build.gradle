@@ -1,0 +1,20 @@
+group 'com.fxsalazar'
+version '0.1'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    compile "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
+    compile "com.squareup.retrofit2:converter-simplexml:$retrofit2_version"
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+}
