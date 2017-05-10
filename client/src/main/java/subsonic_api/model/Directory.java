@@ -46,7 +46,7 @@ import java.util.List;
 })
 public class Directory {
 
-    @Element(required = false)
+    @ElementList(inline = true, entry = "child", required = false)
     protected List<Child> child;
     @Attribute(name = "id", required = true)
     protected String id;
@@ -54,9 +54,10 @@ public class Directory {
     protected String parent;
     @Attribute(name = "name", required = true)
     protected String name;
+    // TODO: 10/05/2017 change to date
     @Attribute(required = false, name = "starred")
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar starred;
+    protected String starred;
     @Attribute(required = false, name = "userRating")
     protected Integer userRating;
     @Attribute(required = false, name = "averageRating")
@@ -157,7 +158,7 @@ public class Directory {
      * @return possible object is
      * {@link XMLGregorianCalendar }
      */
-    public XMLGregorianCalendar getStarred() {
+    public String getStarred() {
         return starred;
     }
 
@@ -167,7 +168,7 @@ public class Directory {
      * @param value allowed object is
      *              {@link XMLGregorianCalendar }
      */
-    public void setStarred(XMLGregorianCalendar value) {
+    public void setStarred(String value) {
         this.starred = value;
     }
 
@@ -231,4 +232,17 @@ public class Directory {
         this.playCount = value;
     }
 
+    @Override
+    public String toString() {
+        return "Directory{" +
+                "child=" + child +
+                ", id='" + id + '\'' +
+                ", parent='" + parent + '\'' +
+                ", name='" + name + '\'' +
+                ", starred='" + starred + '\'' +
+                ", userRating=" + userRating +
+                ", averageRating=" + averageRating +
+                ", playCount=" + playCount +
+                '}';
+    }
 }

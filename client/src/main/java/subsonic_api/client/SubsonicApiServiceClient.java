@@ -4,12 +4,15 @@ import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import subsonic_api.model.*;
 import subsonic_api.model.Error;
+
+import java.io.InputStream;
 
 /**
  * Created by fxsalazar
@@ -21,7 +24,7 @@ public class SubsonicApiServiceClient {
 
     public SubsonicApiServiceClient(String username, String password) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new SubsonicAuthParametersInterceptor(username, password))
                 .addInterceptor(logging)
@@ -96,6 +99,24 @@ public class SubsonicApiServiceClient {
         return callService(service.getSong(id), new Function<Response, Child>() {
             public Child apply(Response response) throws Exception {
                 return response.getSong();
+            }
+        });
+    }
+
+    public Single<Directory> getMusicDirectory(int id) {
+        return callService(service.getMusicDirectory(id), new Function<Response, Directory>() {
+            @Override
+            public Directory apply(Response response) throws Exception {
+                return response.getDirectory();
+            }
+        });
+    }
+
+    public Single<InputStream> getHlsStreamer(int id) {
+        return service.getHlsStreamer(id).flatMap(new Function<ResponseBody, SingleSource<? extends InputStream>>() {
+            @Override
+            public SingleSource<? extends InputStream> apply(ResponseBody responseBody) throws Exception {
+                return Single.just(responseBody.source().inputStream());
             }
         });
     }

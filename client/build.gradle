@@ -17,4 +17,8 @@ dependencies {
     compile "com.squareup.retrofit2:converter-simplexml:$retrofit2_version"
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
+
+    compile 'com.iheartradio.m3u8:open-m3u8:0.2.4'
+
+//    compile 'com.devbrackets.android:exomedia:4.0.0'
 }

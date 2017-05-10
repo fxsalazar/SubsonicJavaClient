@@ -1,6 +1,7 @@
 package subsonic_api.client;
 
 import io.reactivex.Single;
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import subsonic_api.model.Response;
@@ -33,4 +34,10 @@ interface SubsonicApiService {
 
     @GET("getSong")
     Single<Response> getSong(@Query("id") int id);
+
+    @GET("getMusicDirectory")
+    Single<Response> getMusicDirectory(@Query("id") int id);
+
+    @GET("hls.m3u8")
+    Single<ResponseBody> getHlsStreamer(@Query("id") int id);
 }

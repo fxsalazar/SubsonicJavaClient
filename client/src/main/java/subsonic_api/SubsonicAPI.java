@@ -1,9 +1,13 @@
 package subsonic_api;
 
 
+import com.iheartradio.m3u8.*;
+import com.iheartradio.m3u8.data.Playlist;
 import io.reactivex.functions.BiConsumer;
 import subsonic_api.client.SubsonicApiServiceClient;
-import subsonic_api.model.Child;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by fxsalazar
@@ -13,15 +17,42 @@ public class SubsonicAPI {
     public static void main(String[] args) throws Exception {
         SubsonicApiServiceClient client = new SubsonicApiServiceClient("cary", "cary");
 
-        //song id='466', parent='401'
 
-        client.getSong(466).subscribe(new BiConsumer<Child, Throwable>() {
-            public void accept(Child child, Throwable throwable) throws Exception {
+        client.getHlsStreamer(466).subscribe(new BiConsumer<InputStream, Throwable>() {
+            @Override
+            public void accept(InputStream inputStream, Throwable throwable) {
                 notNull(throwable);
-                System.out.println(child);
-                System.exit(0);
+                try {
+                    PlaylistParser parser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8);
+                    Playlist playlist = null;
+                    playlist = parser.parse();
+                    System.out.println(playlist.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (PlaylistException e) {
+                    e.printStackTrace();
+                }
             }
         });
+
+        //id came from param parent='401' from song object
+//        client.getMusicDirectory(401).subscribe(new BiConsumer<Directory, Throwable>() {
+//            @Override
+//            public void accept(Directory directory, Throwable throwable) throws Exception {
+//                notNull(throwable);
+//                System.out.println(directory);
+//            }
+//        });
+
+//        client.getSong(466).subscribe(new BiConsumer<Child, Throwable>() {
+//            public void accept(Child child, Throwable throwable) throws Exception {
+//                notNull(throwable);
+//                System.out.println(child);
+////                System.exit(0);
+//            }
+//        });
 
 //        client.getAlbum(27).subscribe(new BiConsumer<AlbumWithSongsID3, Throwable>() {
 //            public void accept(AlbumWithSongsID3 albumWithSongsID3, Throwable throwable) throws Exception {
