@@ -38,9 +38,9 @@ public class SubsonicConverterFactory extends Converter.Factory {
     }
 
     private License castTypeObject(Type type, Response response) {
-        if (response.getError() != null) {
+        if (response.getResponse().getError() != null) {
 
         }
-        return response.getLicense();
+        return response.getResponse().getLicense();
     }
 }

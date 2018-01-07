@@ -26,6 +26,12 @@ interface SubsonicApiService {
     @GET("getArtists")
     Single<Response> getArtists();
 
+    @GET("getGenres")
+    Single<Response> getGenres();
+
+    @GET("getSongsByGenre")
+    Single<Response> getSongsByGenre(@Query("genre") String genre);
+
     @GET("getArtist")
     Single<Response> getArtist(@Query("id") int id);
 

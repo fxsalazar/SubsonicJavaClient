@@ -1,41 +1,35 @@
 package subsonic_api;
 
 
-import com.iheartradio.m3u8.*;
-import com.iheartradio.m3u8.data.Playlist;
-import io.reactivex.functions.BiConsumer;
 import subsonic_api.client.SubsonicApiServiceClient;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by fxsalazar
  * 07/05/2017.
  */
 public class SubsonicAPI {
-    public static void main(String[] args) throws Exception {
-        SubsonicApiServiceClient client = new SubsonicApiServiceClient("cary", "cary");
+    public static void main(String[] args) {
+        SubsonicApiServiceClient client = new SubsonicApiServiceClient("admin", "admin");
 
 
-        client.getHlsStreamer(466).subscribe(new BiConsumer<InputStream, Throwable>() {
-            @Override
-            public void accept(InputStream inputStream, Throwable throwable) {
-                notNull(throwable);
-                try {
-                    PlaylistParser parser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8);
-                    Playlist playlist = null;
-                    playlist = parser.parse();
-                    System.out.println(playlist.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                } catch (PlaylistException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        client.getHlsStreamer(466).subscribe(new BiConsumer<InputStream, Throwable>() {
+//            @Override
+//            public void accept(InputStream inputStream, Throwable throwable) {
+//                notNull(throwable);
+//                try {
+//                    PlaylistParser parser = new PlaylistParser(inputStream, Format.EXT_M3U, Encoding.UTF_8);
+//                    Playlist playlist = null;
+//                    playlist = parser.parse();
+//                    System.out.println(playlist.toString());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                } catch (PlaylistException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         //id came from param parent='401' from song object
 //        client.getMusicDirectory(401).subscribe(new BiConsumer<Directory, Throwable>() {
@@ -70,11 +64,16 @@ public class SubsonicAPI {
 //            }
 //        });
 
-//        client.getArtists().subscribe(new BiConsumer<ArtistsID3, Throwable>() {
-//            public void accept(ArtistsID3 artistsID3, Throwable throwable) throws Exception {
-//                notNull(throwable);
-//                System.out.println(artistsID3);
-//            }
+        client.getGenres().subscribe((genres, throwable) -> {
+            notNull(throwable);
+            System.out.println(genres);
+        });
+
+        client.getSongsByGenre("Chistes").subscribe(System.out::println, System.out::println);
+
+//        client.getArtists().subscribe((artistsID3, throwable) -> {
+//            notNull(throwable);
+//            System.out.println(artistsID3);
 //        });
 
 //        client.getUsers().subscribe(new BiConsumer<Users, Throwable>() {
@@ -137,6 +136,9 @@ public class SubsonicAPI {
     private static void notNull(Object obj) {
         if (obj != null) {
             System.out.println(obj);
+            if (obj instanceof Throwable) {
+                ((Exception) obj).printStackTrace();
+            }
             System.exit(0);
         }
     }

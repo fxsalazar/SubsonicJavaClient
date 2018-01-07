@@ -1,4 +1,32 @@
 group 'com.fxsalazar'
 version '0.1'
 
-ext.retrofit2_version = '2.2.0'
+project.ext {
+    retrofit2_version = '2.2.0'
+}
+buildscript {
+    ext.kotlin_version = '1.2.10'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+apply plugin: 'kotlin'
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

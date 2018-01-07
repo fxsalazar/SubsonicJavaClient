@@ -15,9 +15,9 @@ import java.security.NoSuchAlgorithmException;
  * 07/05/2017.
  */
 public class SubsonicAuthParametersInterceptor implements Interceptor {
+    private static final String SALT = "cu1o";
     private final String username;
     private final String password;
-    private final String salt = "c19b2d";
 
     public SubsonicAuthParametersInterceptor(String username, String password) {
         this.username = username;
@@ -28,11 +28,11 @@ public class SubsonicAuthParametersInterceptor implements Interceptor {
         Request originalRequest = chain.request();
         HttpUrl.Builder urlBuilder = originalRequest.url().newBuilder();
         urlBuilder.setQueryParameter("u", username);
-        urlBuilder.setQueryParameter("t", md5Hash(password + salt));
-//        urlBuilder.setQueryParameter("s", "dfghjk");
-        urlBuilder.setQueryParameter("s", salt);
-        urlBuilder.setQueryParameter("v", "1.14.0");
+        urlBuilder.setQueryParameter("t", md5Hash(password + SALT));
+        urlBuilder.setQueryParameter("s", SALT);
+        urlBuilder.setQueryParameter("v", "1.16.0");
         urlBuilder.setQueryParameter("c", "android_client");
+        urlBuilder.setQueryParameter("f", "json");
         Request build = originalRequest.newBuilder().url(urlBuilder.build().url()).build();
         return chain.proceed(build);
     }
